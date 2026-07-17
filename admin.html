@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de administración · Apartaestudio Los Robles</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABoElEQVR4nO1bUbKDIAyMzjuJ3v9IepW+jw4dhiI0SDZIsn9V1OyyiUHrQgxs2/bijNfCeZ7Lr2OrA59C+go1MdbSzqeTJ6pzyKozA/Eccm74csCs5Iny3NbagNmQcizWAAv4CGBh9gNirmu6wQoCZ08B7QC0sVi0fwzzDjAvwJ/GRY/juNy37zswEnANKBFPgRICIgCHeAppIcRrwB3yPY6vQVSAXsFLiiCWArWgc9ZuOeYu4HeBEomwT9r2MURS4IrArzN4NU5CGFgjxLUv6jbYXQBp+/Y+P8QBrbOJcIH5tYALoB2ANlwAxEVaKzeiIeougHTl7n1+WApwZxPVDosIcLeVvdtKcwBfDAVyLatBCYg+EepNSMIBojUA/YCzBeJFcHQRYIuhUYWAdoIjCuGtsHYA2lB5NVYCOkWGEwD93tB8CrgA2gFowwXQDkAb5gUY7jaI7gPMO8AF0A5AGwuRzT9LE72/IDHvABeAiPed3SwInNd0gwXEXD0F4h8WXJBy/HLAzCLkuBXJztIflCa1WANmcEONA4vgUxzBmbh/dS+RH/2zQ38AAAAASUVORK5CYII=">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --primary:#FF385C; --primary-dark:#D70466; --dark:#222222; --gray:#717171;
+    --border:#EBEBEB; --bg:#FFFFFF; --bg-soft:#F7F7F7; --green:#1E7A34; --green-bg:#E4F8EA;
+    --blue:#0F5E5E; --blue-bg:#E4F4F4;
+    --shadow:0 6px 20px rgba(0,0,0,0.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg-soft);color:var(--dark);font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 20px 60px;}
+  h1{font-family:'Poppins',sans-serif;font-weight:600;font-size:21px;margin:0 0 4px;}
+  h2{font-family:'Poppins',sans-serif;font-weight:600;font-size:16px;margin:0 0 12px;}
+  .subtitle{color:var(--gray);font-size:13px;margin:0 0 24px;}
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;}
+  label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;}
+  input[type=password], input[type=text], input[type=date]{
+    width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;
+    font-family:'Inter',sans-serif;font-size:13.5px;color:var(--dark);margin-bottom:12px;
+  }
+  input:focus, textarea:focus{outline:none;border-color:var(--primary);}
+  textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:10px;
+    font-family:'Inter',sans-serif;font-size:13px;color:var(--dark);margin-bottom:12px;resize:vertical;min-height:56px;
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    background:var(--primary);color:#fff;font-weight:700;font-size:13.5px;border:none;
+    padding:10px 16px;border-radius:22px;cursor:pointer;transition:background .15s;
+  }
+  .btn:hover{background:var(--primary-dark);}
+  .btn:disabled{opacity:0.5;cursor:not-allowed;}
+  .btn.danger{background:#B91C1C;}
+  .btn.danger:hover{background:#8f1616;}
+  .btn.ghost{background:var(--bg-soft);color:var(--dark);border:1px solid var(--border);}
+  .btn.ghost:hover{background:var(--border);}
+  .btn.full{width:100%;}
+  .btn.small{padding:7px 12px;font-size:12px;}
+  .error-box{background:#FFE8EC;color:var(--primary-dark);font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:8px;margin-bottom:12px;display:none;}
+  .success-box{background:var(--green-bg);color:var(--green);font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:8px;margin-bottom:12px;display:none;}
+  #app-panel{display:none;}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  .logout-link{color:var(--gray);font-size:12.5px;cursor:pointer;text-decoration:underline;}
+
+  /* Dashboard */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+  .stat-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);}
+  .stat-label{font-size:11px;color:var(--gray);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px;}
+  .stat-value{font-family:'Poppins',sans-serif;font-weight:700;font-size:19px;color:var(--dark);}
+  .stat-value.small{font-size:14px;line-height:1.3;}
+  @media (max-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* Filters + list */
+  .filter-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .filter-tab{
+    padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg);
+    font-size:12.5px;font-weight:600;cursor:pointer;color:var(--gray);
+  }
+  .filter-tab.active{background:var(--dark);color:#fff;border-color:var(--dark);}
+  .booking-row{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:12px 14px;border-radius:10px;cursor:pointer;border:1px solid transparent;
+  }
+  .booking-row:hover{background:var(--bg-soft);}
+  .booking-row.selected{background:var(--blue-bg);border-color:var(--blue);}
+  .booking-row .left{min-width:0;}
+  .booking-row .code{font-family:'Poppins',sans-serif;font-weight:700;font-size:13.5px;}
+  .booking-row .meta{font-size:12px;color:var(--gray);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .booking-row .amount{font-size:12.5px;font-weight:600;white-space:nowrap;}
+  .status-pill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em;flex-shrink:0;}
+  .status-confirmed{background:var(--green-bg);color:var(--green);}
+  .status-cancelled{background:#FDE8E8;color:#B91C1C;}
+  .empty-state{color:var(--gray);font-size:13px;text-align:center;padding:20px 0;}
+  #list-container{max-height:360px;overflow-y:auto;}
+
+  /* Detail panel */
+  .booking-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .booking-code{font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;}
+  .detail-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--border);font-size:13px;}
+  .detail-row:last-child{border-bottom:none;}
+  .detail-row .label{color:var(--gray);}
+  .detail-row .value{font-weight:600;text-align:right;}
+  .refund-box{background:var(--bg-soft);border-radius:10px;padding:12px 14px;margin:14px 0;}
+  .refund-box .big{font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;color:var(--primary);}
+  .section-divider{border-top:1px solid var(--border);margin:18px 0;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+  /* Photo management */
+  .photos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:12px;}
+  .photo-item{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--bg-soft);aspect-ratio:1;}
+  .photo-item img{width:100%;height:100%;object-fit:cover;display:block;}
+  .photo-item .photo-badge{position:absolute;top:5px;left:5px;background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
+  .photo-item .photo-controls{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;padding:5px;background:linear-gradient(to top, rgba(0,0,0,0.55), transparent);}
+  .photo-item button{
+    background:rgba(255,255,255,0.92);border:none;border-radius:50%;width:24px;height:24px;
+    font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  .photo-item button.photo-delete{background:#B91C1C;color:#fff;}
+  .photo-item button:disabled{opacity:0.3;cursor:not-allowed;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="login-panel">
+    <h1>Panel de administración</h1>
+    <p class="subtitle">Apartaestudio Los Robles, Maneiro — acceso solo para anfitriones.</p>
+    <div class="card">
+      <p class="error-box" id="login-error"></p>
+      <label for="admin-password">Contraseña</label>
+      <input type="password" id="admin-password" autocomplete="current-password">
+      <button class="btn full" id="login-btn">Entrar</button>
+    </div>
+  </div>
+
+  <div id="app-panel">
+    <div class="top-bar">
+      <h1 style="margin:0;">Gestión de reservas</h1>
+      <span class="logout-link" id="logout-btn">Cerrar sesión</span>
+    </div>
+
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Reservas confirmadas</div>
+        <div class="stat-value" id="stat-confirmed">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Reservas canceladas</div>
+        <div class="stat-value" id="stat-cancelled" style="color:#B91C1C;">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Ingresos confirmados</div>
+        <div class="stat-value small" id="stat-revenue">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Próxima entrada</div>
+        <div class="stat-value small" id="stat-next">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="filter-tabs">
+        <div class="filter-tab active" data-filter="all">Todas</div>
+        <div class="filter-tab" data-filter="confirmed">Confirmadas</div>
+        <div class="filter-tab" data-filter="cancelled">Canceladas</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <input type="text" id="search-code" placeholder="Buscar por código (MAR-0001)" style="margin-bottom:0;text-transform:uppercase;">
+        <button class="btn ghost small" id="search-btn" style="flex-shrink:0;">Buscar</button>
+      </div>
+      <p class="error-box" id="list-error"></p>
+      <div id="list-container">
+        <p class="empty-state" id="list-empty">Cargando reservas…</p>
+      </div>
+    </div>
+
+    <div class="card" id="result-card" style="display:none;">
+      <p class="success-box" id="action-success"></p>
+      <p class="error-box" id="detail-error"></p>
+      <div class="booking-header">
+        <span class="booking-code" id="r-code"></span>
+        <span class="status-pill" id="r-status"></span>
+      </div>
+
+      <div class="detail-row"><span class="label">Huésped</span><span class="value" id="r-name"></span></div>
+      <div class="detail-row"><span class="label">Correo</span><span class="value" id="r-email"></span></div>
+      <div class="detail-row"><span class="label">Teléfono</span><span class="value" id="r-phone"></span></div>
+      <div class="detail-row"><span class="label">Entrada</span><span class="value" id="r-checkin"></span></div>
+      <div class="detail-row"><span class="label">Salida</span><span class="value" id="r-checkout"></span></div>
+      <div class="detail-row"><span class="label">Noches</span><span class="value" id="r-nights"></span></div>
+      <div class="detail-row"><span class="label">Huéspedes</span><span class="value" id="r-guests"></span></div>
+      <div class="detail-row"><span class="label">Monto pagado</span><span class="value" id="r-amount"></span></div>
+      <div class="detail-row"><span class="label">Referencia Wompi</span><span class="value" id="r-reference"></span></div>
+
+      <div class="section-divider"></div>
+      <h2>Notas internas</h2>
+      <p style="font-size:11.5px;color:var(--gray);margin-top:-8px;">Solo la ven los anfitriones — el huésped nunca la ve.</p>
+      <textarea id="internal-notes" placeholder="Ej. huésped pidió llegada tardía, llega en vuelo nocturno..."></textarea>
+      <button class="btn ghost small" id="save-notes-btn">Guardar nota</button>
+
+      <div id="active-actions">
+        <div class="section-divider"></div>
+        <h2>Modificar fechas</h2>
+        <div class="two-col">
+          <div>
+            <label for="edit-checkin">Nueva entrada</label>
+            <input type="date" id="edit-checkin">
+          </div>
+          <div>
+            <label for="edit-checkout">Nueva salida</label>
+            <input type="date" id="edit-checkout">
+          </div>
+        </div>
+        <button class="btn ghost full" id="update-dates-btn">Guardar nuevas fechas</button>
+
+        <div class="section-divider"></div>
+        <h2>Cancelar reserva</h2>
+        <div class="refund-box">
+          <div style="font-size:12px;color:var(--gray);margin-bottom:4px;">Si se cancela hoy, el reembolso sería:</div>
+          <div class="big" id="r-refund-estimate"></div>
+        </div>
+        <label for="cancel-reason">Motivo de la cancelación (opcional)</label>
+        <textarea id="cancel-reason" placeholder="Ej. el huésped solicitó cancelar por cambio de planes..."></textarea>
+        <button class="btn danger full" id="cancel-btn">Cancelar esta reserva</button>
+      </div>
+
+      <div id="already-cancelled" style="display:none;">
+        <div class="section-divider"></div>
+        <div class="detail-row"><span class="label">Cancelada el</span><span class="value" id="r-cancelled-at"></span></div>
+        <div class="detail-row"><span class="label">Reembolso aplicado</span><span class="value" id="r-refund-applied"></span></div>
+        <div class="detail-row"><span class="label">Motivo</span><span class="value" id="r-cancel-reason"></span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Fotos del alojamiento</h2>
+      <p style="font-size:12.5px;color:var(--gray);margin-top:-8px;">
+        La primera foto es la que se ve primero en la galería de la guía.
+        Usa las flechas para reordenar.
+      </p>
+      <p class="error-box" id="photos-error"></p>
+      <p class="success-box" id="photos-success"></p>
+      <div id="photos-grid" class="photos-grid"></div>
+      <label for="photo-upload-input" class="btn ghost full" style="margin-top:6px;cursor:pointer;">
+        + Agregar foto
+      </label>
+      <input type="file" id="photo-upload-input" accept="image/*" style="display:none;">
+    </div>
+
+    <div class="card" style="border-color:#F3B3B3;">
+      <h2 style="color:#B91C1C;">Zona de peligro</h2>
+      <p style="font-size:12.5px;color:var(--gray);margin-top:-8px;">
+        Borra permanentemente todo el historial de reservas de la base de datos
+        (útil para limpiar reservas de prueba antes de pasar a producción).
+        Esta acción no se puede deshacer.
+      </p>
+      <p class="error-box" id="reset-error"></p>
+      <p class="success-box" id="reset-success"></p>
+      <button class="btn danger full" id="reset-btn">Borrar historial de reservas</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TOKEN_KEY = 'admin_session_token';
+function getToken(){ return sessionStorage.getItem(TOKEN_KEY); }
+function setToken(t){ sessionStorage.setItem(TOKEN_KEY, t); }
+function clearToken(){ sessionStorage.removeItem(TOKEN_KEY); }
+
+function showPanel(){
+  document.getElementById('login-panel').style.display = 'none';
+  document.getElementById('app-panel').style.display = 'block';
+  loadList();
+  loadPhotos();
+}
+function showLogin(){
+  document.getElementById('login-panel').style.display = 'block';
+  document.getElementById('app-panel').style.display = 'none';
+}
+if (getToken()) showPanel();
+
+async function apiPost(path, body){
+  const res = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+    body: JSON.stringify(body || {})
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) { clearToken(); showLogin(); throw new Error('Sesión expirada'); }
+  if (!res.ok) throw new Error(data.error || 'Error de servidor');
+  return data;
+}
+
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const errorEl = document.getElementById('login-error');
+  errorEl.style.display = 'none';
+  const password = document.getElementById('admin-password').value;
+  if (!password) return;
+  try {
+    const res = await fetch('/api/admin-login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'No se pudo iniciar sesión');
+    setToken(data.token);
+    showPanel();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  }
+});
+document.getElementById('admin-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('login-btn').click(); });
+document.getElementById('logout-btn').addEventListener('click', () => { clearToken(); showLogin(); });
+
+let allBookings = [];
+let currentFilter = 'all';
+let currentBooking = null;
+
+document.querySelectorAll('.filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentFilter = tab.dataset.filter;
+    renderList();
+  });
+});
+
+async function loadList(){
+  const errorEl = document.getElementById('list-error');
+  errorEl.style.display = 'none';
+  try {
+    const data = await apiPost('/api/admin-list', {});
+    allBookings = data.bookings || [];
+    renderStats();
+    renderList();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  }
+}
+
+let liveTRM = 4100; // tasa de respaldo hasta que cargue la tasa en vivo
+async function loadTRM(){
+  try {
+    const res = await fetch('https://co.dolarapi.com/v1/trm');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.valor) liveTRM = data.valor;
+    }
+  } catch (err) { /* usamos la tasa de respaldo */ }
+  renderStats();
+}
+loadTRM();
+
+function renderStats(){
+  const confirmed = allBookings.filter(b => b.status === 'confirmed');
+  const cancelled = allBookings.filter(b => b.status === 'cancelled');
+  document.getElementById('stat-confirmed').textContent = confirmed.length;
+  document.getElementById('stat-cancelled').textContent = cancelled.length;
+
+  const revenueCOP = confirmed.reduce((sum, b) => sum + (Number(b.amount_cop_charged) || 0), 0);
+  const revenueUSD = Math.round((revenueCOP / liveTRM) * 100) / 100;
+  document.getElementById('stat-revenue').textContent =
+    '$' + revenueUSD.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD'
+    + ' ($' + revenueCOP.toLocaleString('es-CO') + ' COP)';
+
+  const today = new Date().toISOString().slice(0, 10);
+  const upcoming = confirmed
+    .filter(b => b.checkin >= today)
+    .sort((a, b) => a.checkin.localeCompare(b.checkin))[0];
+  document.getElementById('stat-next').textContent = upcoming
+    ? `${upcoming.checkin} — ${upcoming.guest_name}`
+    : 'Sin próximas reservas';
+}
+
+function renderList(){
+  const container = document.getElementById('list-container');
+  const filtered = currentFilter === 'all'
+    ? allBookings
+    : allBookings.filter(b => b.status === currentFilter);
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p class="empty-state">No hay reservas para mostrar.</p>';
+    return;
+  }
+
+  container.innerHTML = '';
+  filtered.forEach(b => {
+    const row = document.createElement('div');
+    row.className = 'booking-row' + (currentBooking && currentBooking.booking_code === b.booking_code ? ' selected' : '');
+    row.innerHTML = `
+      <div class="left">
+        <div class="code">${b.booking_code || '(sin código)'} <span class="status-pill ${b.status === 'confirmed' ? 'status-confirmed' : 'status-cancelled'}">${b.status === 'confirmed' ? 'Confirmada' : 'Cancelada'}</span></div>
+        <div class="meta">${b.guest_name || '—'} · ${b.checkin || '?'} → ${b.checkout || '?'}</div>
+      </div>
+      <div class="amount">${b.amount_cop_charged ? '$' + Number(b.amount_cop_charged).toLocaleString('es-CO') : ''}</div>
+    `;
+    row.addEventListener('click', () => openBooking(b.booking_code));
+    container.appendChild(row);
+  });
+}
+
+document.getElementById('search-btn').addEventListener('click', () => {
+  const code = document.getElementById('search-code').value.trim();
+  if (code) openBooking(code);
+});
+document.getElementById('search-code').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('search-btn').click();
+});
+
+async function openBooking(bookingCode){
+  const errorEl = document.getElementById('list-error');
+  errorEl.style.display = 'none';
+  document.getElementById('action-success').style.display = 'none';
+  document.getElementById('detail-error').style.display = 'none';
+  try {
+    const data = await apiPost('/api/admin-search', { bookingCode });
+    currentBooking = data.booking;
+    renderList();
+    renderDetail(data.booking, data.estimatedRefundPercent);
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  }
+}
+
+function renderDetail(b, estimatedRefundPercent){
+  document.getElementById('result-card').style.display = 'block';
+  document.getElementById('result-card').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  document.getElementById('r-code').textContent = b.booking_code;
+
+  const statusEl = document.getElementById('r-status');
+  const isConfirmed = b.status === 'confirmed';
+  statusEl.textContent = isConfirmed ? 'Confirmada' : 'Cancelada';
+  statusEl.className = 'status-pill ' + (isConfirmed ? 'status-confirmed' : 'status-cancelled');
+
+  document.getElementById('r-name').textContent = b.guest_name || '—';
+  document.getElementById('r-email').textContent = b.guest_email || '—';
+  document.getElementById('r-phone').textContent = b.guest_phone || '—';
+  document.getElementById('r-checkin').textContent = b.checkin || '—';
+  document.getElementById('r-checkout').textContent = b.checkout || '—';
+  document.getElementById('r-nights').textContent = b.nights ?? '—';
+  document.getElementById('r-guests').textContent = b.guests ?? '—';
+  document.getElementById('r-amount').textContent = b.amount_cop_charged
+    ? '$' + Number(b.amount_cop_charged).toLocaleString('es-CO') + ' COP' : '—';
+  document.getElementById('r-reference').textContent = b.wompi_reference || '—';
+
+  document.getElementById('internal-notes').value = b.internal_notes || '';
+  document.getElementById('edit-checkin').value = b.checkin || '';
+  document.getElementById('edit-checkout').value = b.checkout || '';
+
+  if (isConfirmed) {
+    document.getElementById('active-actions').style.display = 'block';
+    document.getElementById('already-cancelled').style.display = 'none';
+    document.getElementById('r-refund-estimate').textContent = estimatedRefundPercent + '%'
+      + (b.amount_cop_charged ? ` (≈ $${Math.round(b.amount_cop_charged * estimatedRefundPercent / 100).toLocaleString('es-CO')} COP)` : '');
+  } else {
+    document.getElementById('active-actions').style.display = 'none';
+    document.getElementById('already-cancelled').style.display = 'block';
+    document.getElementById('r-cancelled-at').textContent = b.cancelled_at ? new Date(b.cancelled_at).toLocaleString('es-CO') : '—';
+    document.getElementById('r-refund-applied').textContent = (b.refund_percent ?? '—') + '%'
+      + (b.refund_amount_cop ? ` (≈ $${Number(b.refund_amount_cop).toLocaleString('es-CO')} COP)` : '');
+    document.getElementById('r-cancel-reason').textContent = b.cancel_reason || '(sin especificar)';
+  }
+}
+
+document.getElementById('save-notes-btn').addEventListener('click', async () => {
+  if (!currentBooking) return;
+  const btn = document.getElementById('save-notes-btn');
+  btn.disabled = true;
+  try {
+    await apiPost('/api/admin-update', {
+      bookingCode: currentBooking.booking_code,
+      internalNotes: document.getElementById('internal-notes').value
+    });
+    const successEl = document.getElementById('action-success');
+    successEl.textContent = 'Nota guardada.';
+    successEl.style.display = 'block';
+  } catch (err) {
+    const errorEl = document.getElementById('detail-error');
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('update-dates-btn').addEventListener('click', async () => {
+  if (!currentBooking) return;
+  const newCheckin = document.getElementById('edit-checkin').value;
+  const newCheckout = document.getElementById('edit-checkout').value;
+  const errorEl = document.getElementById('detail-error');
+  errorEl.style.display = 'none';
+  if (!newCheckin || !newCheckout || newCheckout <= newCheckin) {
+    errorEl.textContent = 'Verifica que las fechas sean válidas (salida después de entrada).';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (!window.confirm(`¿Confirmas mover la reserva ${currentBooking.booking_code} a ${newCheckin} → ${newCheckout}? Se notificará al huésped.`)) return;
+
+  const btn = document.getElementById('update-dates-btn');
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+  try {
+    await apiPost('/api/admin-update', { bookingCode: currentBooking.booking_code, newCheckin, newCheckout });
+    const successEl = document.getElementById('action-success');
+    successEl.textContent = 'Fechas actualizadas y huésped notificado.';
+    successEl.style.display = 'block';
+    await loadList();
+    await openBooking(currentBooking.booking_code);
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Guardar nuevas fechas';
+  }
+});
+
+document.getElementById('cancel-btn').addEventListener('click', async () => {
+  if (!currentBooking) return;
+  if (!window.confirm(`¿Confirmas que quieres cancelar la reserva ${currentBooking.booking_code}? Esta acción liberará las fechas en el calendario y notificará al huésped.`)) return;
+
+  const btn = document.getElementById('cancel-btn');
+  btn.disabled = true;
+  btn.textContent = 'Cancelando…';
+  const reason = document.getElementById('cancel-reason').value.trim();
+  const errorEl = document.getElementById('detail-error');
+  errorEl.style.display = 'none';
+
+  try {
+    const data = await apiPost('/api/admin-cancel', { bookingCode: currentBooking.booking_code, reason });
+    const successEl = document.getElementById('action-success');
+    successEl.textContent = `Reserva cancelada. Reembolso correspondiente: ${data.refundPercent}% (≈ $${data.refundAmountUSD} USD / $${data.refundAmountCOP.toLocaleString('es-CO')} COP). Recuerda ejecutarlo manualmente en el Dashboard de Wompi.`;
+    successEl.style.display = 'block';
+    await loadList();
+    await openBooking(currentBooking.booking_code);
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Cancelar esta reserva';
+  }
+});
+
+/* ---------- Fotos del alojamiento ---------- */
+let currentPhotos = [];
+
+async function loadPhotos(){
+  const errorEl = document.getElementById('photos-error');
+  errorEl.style.display = 'none';
+  try {
+    const data = await apiPost('/api/admin-photos-list', {});
+    currentPhotos = data.photos || [];
+    renderPhotos();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  }
+}
+
+function renderPhotos(){
+  const grid = document.getElementById('photos-grid');
+  grid.innerHTML = '';
+  if (currentPhotos.length === 0) {
+    grid.innerHTML = '<p class="empty-state" style="grid-column:1/-1;">Aún no has subido fotos aquí — mientras tanto, la guía sigue mostrando las fotos originales.</p>';
+    return;
+  }
+  currentPhotos.forEach((p, i) => {
+    const item = document.createElement('div');
+    item.className = 'photo-item';
+    item.innerHTML = `
+      ${i === 0 ? '<span class="photo-badge">1ª foto</span>' : ''}
+      <img src="${p.url}" alt="Foto ${i+1}" loading="lazy">
+      <div class="photo-controls">
+        <div>
+          <button class="photo-up" ${i === 0 ? 'disabled' : ''} title="Mover arriba">↑</button>
+          <button class="photo-down" ${i === currentPhotos.length - 1 ? 'disabled' : ''} title="Mover abajo">↓</button>
+        </div>
+        <button class="photo-delete" title="Borrar">✕</button>
+      </div>
+    `;
+    item.querySelector('.photo-up').addEventListener('click', () => movePhoto(i, -1));
+    item.querySelector('.photo-down').addEventListener('click', () => movePhoto(i, 1));
+    item.querySelector('.photo-delete').addEventListener('click', () => deletePhotoAt(i));
+    grid.appendChild(item);
+  });
+}
+
+async function movePhoto(index, delta){
+  const target = index + delta;
+  if (target < 0 || target >= currentPhotos.length) return;
+  const arr = currentPhotos.slice();
+  const [moved] = arr.splice(index, 1);
+  arr.splice(target, 0, moved);
+  currentPhotos = arr;
+  renderPhotos();
+  try {
+    await apiPost('/api/admin-photos-reorder', { order: currentPhotos.map(p => p.id) });
+  } catch (err) {
+    document.getElementById('photos-error').textContent = err.message;
+    document.getElementById('photos-error').style.display = 'block';
+    await loadPhotos();
+  }
+}
+
+async function deletePhotoAt(index){
+  const photo = currentPhotos[index];
+  if (!window.confirm('¿Borrar esta foto? No se puede deshacer.')) return;
+  const errorEl = document.getElementById('photos-error');
+  errorEl.style.display = 'none';
+  try {
+    await apiPost('/api/admin-photos-delete', { id: photo.id });
+    await loadPhotos();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  }
+}
+
+document.getElementById('photo-upload-input').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const errorEl = document.getElementById('photos-error');
+  const successEl = document.getElementById('photos-success');
+  errorEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  try {
+    const base64 = await resizeImageToBase64(file, 1400, 0.8);
+    await apiPost('/api/admin-photos-upload', { base64 });
+    successEl.textContent = 'Foto subida.';
+    successEl.style.display = 'block';
+    await loadPhotos();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    e.target.value = '';
+  }
+});
+
+// Redimensiona la imagen en el navegador antes de subirla, para no
+// enviar archivos pesados (máx. ~1400px de ancho, calidad 80%).
+function resizeImageToBase64(file, maxWidth, quality){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = (e) => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = () => {
+      const scale = Math.min(1, maxWidth / img.width);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', quality);
+      resolve(dataUrl.split(',')[1]); // solo el base64, sin el prefijo data:...
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+document.getElementById('reset-btn').addEventListener('click', async () => {
+  const errorEl = document.getElementById('reset-error');
+  const successEl = document.getElementById('reset-success');
+  errorEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  if (!window.confirm('¿Seguro que quieres borrar TODO el historial de reservas? Esta acción es irreversible.')) return;
+
+  const typed = window.prompt('Para confirmar, escribe exactamente la palabra BORRAR:');
+  if (typed !== 'BORRAR') {
+    errorEl.textContent = 'Confirmación incorrecta — no se borró nada.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('reset-btn');
+  btn.disabled = true;
+  btn.textContent = 'Borrando…';
+  try {
+    const data = await apiPost('/api/admin-reset', { confirmation: 'BORRAR' });
+    successEl.textContent = `Historial borrado (${data.deletedCount} reservas eliminadas).`;
+    successEl.style.display = 'block';
+    document.getElementById('result-card').style.display = 'none';
+    currentBooking = null;
+    await loadList();
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Borrar historial de reservas';
+  }
+});
+</script>
+</body>
+</html>
